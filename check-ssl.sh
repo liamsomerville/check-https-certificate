@@ -1,7 +1,8 @@
 #!/bin/bash
 # check https certificate expire time
-# v1.0
-# created by TaPe
+# v1.1
+# Originally created by TaPe
+# Ammended to include the serial number of cert 
 # requirements openssl, bc
 ################################
 
@@ -19,6 +20,7 @@ for i in "${domains[@]}"
 do
 	# get https certificate (support SNI) validity date
 	certdate=`echo | openssl s_client -servername $i -connect $i:443 2>/dev/null | openssl x509 -noout -dates | grep notAfter | cut -d'=' -f 2`
+	certserial=`echo | openssl s_client -servername $i -connect $i:443 2>/dev/null | openssl x509 -noout -serial`
 	# get https certificate (support SNI) validity date in seconds
 	certdates=`date -d "$certdate" +"%s"`
 
